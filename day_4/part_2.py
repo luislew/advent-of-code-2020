@@ -22,33 +22,30 @@ def validate_range(value, minimum, maximum):
         value_as_int = int(value)
     except ValueError:
         return False
-    else:
-        if value_as_int < minimum or value_as_int > maximum:
-            return False
-    return True
+    return minimum <= value_as_int <= maximum
 
 
 def validate_height(value: str):
     if not value.endswith(("cm", "in")):
         return False
+
     height, unit = value[:-2], value[-2:]
-    if unit == "cm":
-        return validate_range(height, 150, 193)
-    else:
-        return validate_range(height, 59, 76)
+    return validate_range(height, 150, 193) if unit == "cm" else validate_range(height, 59, 76)
 
 
 def is_valid_passport(passport):
-    return (
-        set(passport.keys()).issuperset(EXPECTED_KEYS) and
-        validate_range(passport["byr"], 1920, 2002) and
-        validate_range(passport["iyr"], 2010, 2020) and
-        validate_range(passport["eyr"], 2020, 2030) and
-        validate_height(passport["hgt"]) and
-        HAIR_COLOR_REGEX.match(passport["hcl"]) and
-        passport["ecl"] in VALID_EYE_COLORS and
-        PASSPORT_ID_REGEX.match(passport["pid"])
-    )
+    if not set(passport.keys()).issuperset(EXPECTED_KEYS):
+        return False
+
+    return all([
+        HAIR_COLOR_REGEX.match(passport["hcl"]),
+        PASSPORT_ID_REGEX.match(passport["pid"]),
+        passport["ecl"] in VALID_EYE_COLORS,
+        validate_range(passport["byr"], 1920, 2002),
+        validate_range(passport["iyr"], 2010, 2020),
+        validate_range(passport["eyr"], 2020, 2030),
+        validate_height(passport["hgt"]),
+    ])
 
 
 if __name__ == "__main__":
