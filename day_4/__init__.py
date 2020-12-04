@@ -13,6 +13,7 @@ def get_data_from_input():
             if not line.strip():  # Found a blank link marking end of record
                 yield record
                 record = {}
+                continue
 
             kv_pairs = line.strip().split()
             for pair in kv_pairs:

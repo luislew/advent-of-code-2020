@@ -13,8 +13,8 @@ from day_4 import EXPECTED_KEYS, get_data_from_input, valid_passports_count
 # pid (Passport ID) - a nine-digit number, including leading zeroes.
 # cid (Country ID) - ignored, missing or not.
 HAIR_COLOR_REGEX = re.compile(r"^#[0-9a-fA-F]{6}$")
-VALID_EYE_COLORS = {'amb', 'blu', 'brn', 'grn', 'gry', 'hzl', 'oth'}
 PASSPORT_ID_REGEX = re.compile(r"^[0-9]{9}$")
+VALID_EYE_COLORS = {'amb', 'blu', 'brn', 'grn', 'gry', 'hzl', 'oth'}
 
 
 def validate_range(value, minimum, maximum):
