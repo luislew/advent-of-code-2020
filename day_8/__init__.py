@@ -16,21 +16,17 @@ def calculate_value_at_infinite_loop_or_end(instructions: list) -> (int, list, b
     current_idx = 0
     accumulated_value = 0
     infinite_loop = True
-    visited = []
+    visited = set()
     while current_idx not in visited:
-        visited.append(current_idx)
+        visited.add(current_idx)
         try:
             op, value = instructions[current_idx]
         except IndexError:
             infinite_loop = False
             break
 
-        if op == "nop":
-            current_idx += 1
-        elif op == "acc":
+        current_idx += value if op == "jmp" else 1
+        if op == "acc":
             accumulated_value += value
-            current_idx += 1
-        elif op == "jmp":
-            current_idx += value
 
     return accumulated_value, visited, infinite_loop
