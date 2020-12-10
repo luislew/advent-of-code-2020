@@ -1,15 +1,13 @@
 from itertools import combinations
 from math import prod
 
-from day_10 import SORTED_JOLTAGES_WITH_ENDS, check_chain_validity, get_joltage_diffs_for_joltages
+from day_10 import JOLTAGE_DIFFS, SORTED_JOLTAGES_WITH_ENDS, check_chain_validity
 
 
-def get_subchains_for_chain(joltages):
+def get_subchains():
     # Break the chain of adapters into subchains at 3 joltage diff boundaries
-    # NOTE: Just like `get_joltage_diffs_for_data` this expected **sorted** data
-    joltage_diffs = get_joltage_diffs_for_joltages(joltages)
-    current_chain = [joltages[0]]
-    for joltage, joltage_diff in zip(joltages[1:], joltage_diffs):
+    current_chain = [SORTED_JOLTAGES_WITH_ENDS[0]]
+    for joltage, joltage_diff in zip(SORTED_JOLTAGES_WITH_ENDS[1:], JOLTAGE_DIFFS):
         if joltage_diff == 3:
             # Break off a new chain
             yield current_chain
@@ -19,13 +17,13 @@ def get_subchains_for_chain(joltages):
 
 
 def get_valid_combinations_for_subchain(subchain):
-    # Construct all possible subsubchains and count the valid ones
+    """Construct all possible subsubchains and count the valid ones"""
+    count = 1  # We start with a valid subchain
     if len(subchain) < 3:
-        return 1
+        return count
 
-    count = 0
     start, center, end = subchain[0], subchain[1:-1], subchain[-1]
-    for i in range(len(center) + 1):
+    for i in range(len(center)):
         for possible_center in combinations(center, i):
             if check_chain_validity([start, *possible_center, end]):
                 count += 1
@@ -34,5 +32,4 @@ def get_valid_combinations_for_subchain(subchain):
 
 
 if __name__ == "__main__":
-    subchains = get_subchains_for_chain(SORTED_JOLTAGES_WITH_ENDS)
-    print(prod(get_valid_combinations_for_subchain(subchain) for subchain in subchains))
+    print(prod(get_valid_combinations_for_subchain(subchain) for subchain in get_subchains()))
