@@ -1,6 +1,4 @@
 import os
-from collections import defaultdict, deque
-from functools import partial
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -12,26 +10,19 @@ def get_data_from_input():
 
 
 def get_nth_number(starting_numbers, n):
-    spoken_numbers = defaultdict(partial(deque, maxlen=2))  # map of numbers by last turn spoken
+    spoken_numbers = {}  # map of numbers by last turn spoken
     current_turn = 1
-    last_spoken = None
-    last_spoken_new = False
+    number = None
+    last_spoken_turn = None
     for number in starting_numbers:
-        last_spoken_new = number not in spoken_numbers
-        spoken_numbers[number].append(current_turn)
+        last_spoken_turn = spoken_numbers.get(number)
+        spoken_numbers[number] = current_turn
         current_turn += 1
-        last_spoken = number
 
     while current_turn <= n:
-        if last_spoken_new:
-            number = 0
-        else:
-            earlier, later = spoken_numbers[last_spoken]
-            number = later - earlier
-
-        last_spoken_new = number not in spoken_numbers
-        spoken_numbers[number].append(current_turn)
+        number = current_turn - last_spoken_turn - 1 if last_spoken_turn is not None else 0
+        last_spoken_turn = spoken_numbers.get(number)
+        spoken_numbers[number] = current_turn
         current_turn += 1
-        last_spoken = number
 
-    return last_spoken
+    return number
