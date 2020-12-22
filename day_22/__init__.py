@@ -18,7 +18,7 @@ class Deck:
     def draw_card(self) -> int:
         return self.cards.pop(0)
 
-    def add_cards(self, cards: typing.Iterable[int]):
+    def add_cards(self, *cards: int):
         self.cards.extend(cards)
 
     def copy(self, n: int) -> "Deck":
@@ -33,8 +33,10 @@ def get_data_from_input():
 
 def play_round_of_combat(deck_1: Deck, deck_2: Deck) -> None:
     deck_1_card, deck_2_card = deck_1.draw_card(), deck_2.draw_card()
-    winner = deck_1 if deck_1_card > deck_2_card else deck_2
-    winner.add_cards(sorted([deck_1_card, deck_2_card], reverse=True))
+    if deck_1_card > deck_2_card:
+        deck_1.add_cards(deck_1_card, deck_2_card)
+    else:
+        deck_2.add_cards(deck_2_card, deck_1_card)
 
 
 def play_game_of_combat(deck_1: Deck, deck_2: Deck) -> Deck:
