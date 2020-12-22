@@ -9,7 +9,6 @@ def check_message(message, rule_42_substrings, rule_31_substrings):
     # --> 0: (42){2,}(31)+
     substring_length = len(rule_42_substrings[0])
     rule_42_matches = 0
-    original_message = str(message)
     while message:
         if message.startswith(rule_42_substrings):
             message = message[substring_length:]
@@ -27,9 +26,7 @@ def check_message(message, rule_42_substrings, rule_31_substrings):
         else:
             return False
 
-    match = not message and 0 < rule_31_matches <= (rule_42_matches + 1)
-    if match:
-        print(original_message, rule_42_matches, rule_31_matches)
+    return not message and 0 < rule_31_matches < rule_42_matches
 
 
 def solve_problem():
