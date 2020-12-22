@@ -29,7 +29,7 @@ def check_message(message, rule_42_substrings, rule_31_substrings):
     return not message and 0 < rule_31_matches < rule_42_matches
 
 
-def solve_problem():
+def count_matches():
     rules_by_id = RULES_BY_ID
     rules_by_id[8] = parse_rule("8: 42 | 42 8")
     rules_by_id[11] = parse_rule("11: 42 31 | 42 11 31")
@@ -40,4 +40,4 @@ def solve_problem():
 
 
 if __name__ == "__main__":
-    print(solve_problem())
+    print(count_matches())
